@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Sensor Data</title>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-grid.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-theme-alpine.css">
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='styles/output.css') }}">
+</head>
+
+<body class="bg-crayola-500 flex flex-col items-center justify-center h-screen">
+    <div class="text-center w-9/12 bg-white rounded-md px-8 pt-6 pb-8 ">
+        <!-- Header -->
+        <h1 class="text-3xl font-bold mb-6 text-red-500 ">Sensor Data</h1>
+
+        <!-- Logout Button -->
+        <button id="logout-button"
+                class="bg-crayola-500 text-white font-bold py-2 px-4 rounded mb-6">
+            Logout
+        </button>
+
+        <!-- AG Grid Table -->
+        <div id="myGrid"
+             class="ag-theme-alpine mx-auto mb-5"
+             style="height: 500px; width: 100%;"></div>
+    </div>
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Include DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Retrieve the JWT token from localStorage
+            const jwtToken = localStorage.getItem("jwt_token");
+
+            // Redirect to login page if the token is missing
+            if (!jwtToken) {
+                alert("You must log in first!");
+                window.location.href = "/login";
+                return;
+            }
+
+            // Logout Button Functionality
+            const logoutButton = document.getElementById('logout-button');
+            logoutButton.addEventListener('click', function () {
+                if (confirm("Are you sure you want to log out?")) {
+                    // Remove the JWT token from localStorage
+                    localStorage.removeItem("jwt_token");
+                    alert("You have been logged out successfully.");
+                    window.location.href = "/login"; // Redirect to login page
+                }
+            });
+
+            // Function to parse the JWT token and extract the payload
+            const parseJwt = (token) => {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
+                    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+                ).join(''));
+                return JSON.parse(jsonPayload);
+            };
+
+            // Parse the token and extract expiry time
+            const tokenPayload = parseJwt(jwtToken);
+            const expiryTime = tokenPayload.exp * 1000; // Convert exp from seconds to milliseconds
+
+            // Display the token expiration details
+            const tokenDisplay = document.createElement('div');
+            tokenDisplay.style.margin = "10px";
+            tokenDisplay.innerHTML = `
+                <p><strong>Expires At:</strong> ${new Date(expiryTime).toLocaleString()}</p>
+            `;
+            document.body.prepend(tokenDisplay);
+
+            // Set a timer to redirect when the token expires
+            const currentTime = Date.now();
+            const timeUntilExpiry = expiryTime - currentTime;
+            if (timeUntilExpiry > 0) {
+                setTimeout(() => {
+                    alert("Your session has expired. Redirecting to login.");
+                    localStorage.removeItem("jwt_token");
+                    window.location.href = "/login";
+                }, timeUntilExpiry);
+            } else {
+                alert("Your session has already expired. Redirecting to login.");
+                localStorage.removeItem("jwt_token");
+                window.location.href = "/login";
+                return;
+            }
+
+            // Function to handle 401 Unauthorized response
+            const handleUnauthorized = (response) => {
+                if (response.status === 401) {
+                    alert("Session expired or unauthorized access. Redirecting to login.");
+                    localStorage.removeItem("jwt_token");
+                    window.location.href = "/login";
+                    return Promise.reject("Unauthorized access");
+                }
+                return response;
+            };
+
+            // Define column definitions for the AG Grid
+            const columnDefs = [
+                { headerName: 'ID', field: 'id', editable: false },
+                { headerName: 'Power', field: 'power', editable: true },
+                { headerName: 'Voltage L1', field: 'voltage_l1_gnd', editable: true },
+                { headerName: 'Voltage L2', field: 'voltage_l2_gnd', editable: true },
+                { headerName: 'Voltage L3', field: 'voltage_l3_gnd', editable: true },
+                { headerName: 'Pressure', field: 'pressure', editable: true },
+                { headerName: 'Forces', field: 'forces', editable: true },
+                { headerName: 'Cycle Count', field: 'cycle_count', editable: true },
+                { headerName: 'Position', field: 'position', editable: true },
+                { headerName: 'Timestamp', field: 'timestamp', editable: false },
+                {
+                    headerName: 'Actions',
+                    field: 'actions',
+                    cellRenderer: function () {
+                        return `<button class="delete-btn  text-red-500 p-1 text-center">Delete</button>`;
+                    },
+                    editable: false
+                }
+            ];
+
+            // Fetch data for the grid
+            fetch('/sensor_data', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${jwtToken}`
+                }
+            })
+                .then(handleUnauthorized)
+                .then(response => response.json())
+                .then(rowData => {
+                    const gridOptions = {
+                        columnDefs: columnDefs,
+                        rowData: rowData,
+                        pagination: true,
+                        paginationPageSize: 15
+                        ,
+                        onCellEditingStopped: function (event) {
+                            const updatedData = {};
+                            updatedData[event.colDef.field] = event.value;
+
+                            fetch(`/sensor_data/${event.data.id}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Authorization': `Bearer ${jwtToken}`,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(updatedData)
+                            })
+                                .then(handleUnauthorized)
+                                .then(response => {
+                                    if (response.ok) {
+                                        alert("Update successful!");
+                                    } else {
+                                        alert("Failed to update value.");
+                                    }
+                                })
+                                .catch(err => {
+                                    console.error("Error updating data:", err);
+                                    alert("An error occurred while updating data.");
+                                });
+                        },
+                        onGridReady: function () {
+                            document.querySelector('#myGrid').addEventListener('click', function (e) {
+                                if (e.target && e.target.classList.contains('delete-btn')) {
+                                    const rowNode = e.target.closest('.ag-row');
+                                    const rowId = rowNode.getAttribute('row-id');
+                                    const rowData = gridOptions.api.getRowNode(rowId).data;
+
+                                    if (confirm(`Are you sure you want to delete record ID ${rowData.id}?`)) {
+                                        fetch(`/sensor_data/${rowData.id}`, {
+                                            method: 'DELETE',
+                                            headers: {
+                                                'Authorization': `Bearer ${jwtToken}`
+                                            }
+                                        })
+                                            .then(handleUnauthorized)
+                                            .then(response => {
+                                                if (response.ok) {
+                                                    gridOptions.api.applyTransaction({ remove: [rowData] });
+                                                    alert("Record deleted successfully!");
+                                                } else {
+                                                    alert("Failed to delete record.");
+                                                }
+                                            })
+                                            .catch(err => {
+                                                console.error("Error during deletion:", err);
+                                                alert("An error occurred while deleting the record.");
+                                            });
+                                    }
+                                }
+                            });
+                        },
+                        defaultColDef: {
+                            sortable: true,
+                            filter: true,
+                            resizable: true,
+                            flex: 1,
+                        }
+                    };
+
+                    // Initialize AG Grid
+                    const gridDiv = document.querySelector('#myGrid');
+                    new agGrid.Grid(gridDiv, gridOptions);
+                })
+                .catch(err => {
+                    console.error("Error fetching data:", err);
+                    alert("An error occurred while loading data. Redirecting to login.");
+                    window.location.href = "/login";
+                });
+        });
+    </script>
+</body>
+
+</html>

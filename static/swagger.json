@@ -1,0 +1,48 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Flask MySQL API Example",
+        "description": "API documentation for Flask MySQL Example",
+        "version": "1.0.0"
+    },
+    "basePath": "/",
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Hello World",
+                "description": "Returns a hello world message",
+                "responses": {
+                    "200": {
+                        "description": "A hello world message",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "summary": "Get Users",
+                "description": "Retrieve a list of users",
+                "responses": {
+                    "200": {
+                        "description": "A list of users",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

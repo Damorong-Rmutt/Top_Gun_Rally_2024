@@ -1,0 +1,115 @@
+services:
+  db:
+    image: mysql:latest
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_DATABASE: '${DB_NAME}'
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data_test:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306 
+      
+      PMA_ARBITRARY: 0
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+  mqtt-broker:
+    image: eclipse-mosquitto:latest
+    container_name: mqtt-broker
+    restart: always
+    ports:
+      - "1883:1883"  # MQTT default port
+      - "9001:9001"  # WebSocket port (optional)
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/logs:/mosquitto/logs
+    environment:
+      - MQTT_ALLOW_ANONYMOUS=false
+
+  publisher:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mqtt-publisher
+    command: python MQTT/publish.py
+    restart: always
+    depends_on:
+      - mqtt-broker
+    env_file:
+      - .env
+
+  # subscriber:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: mqtt-subscriber
+  #   command: python MQTT/subscribing.py
+  #   restart: always
+  #   depends_on:
+  #     - mqtt-broker
+  #   env_file:
+  #     - .env
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask-api
+    command: python api.py
+    restart: always
+    ports:
+      - "5000:5000"  # Flask API port
+    volumes:
+      - ./static:/app/static
+      - ./templates:/app/templates
+      - ./uploads:/app/uploads  # เพิ่ม volume สำหรับไฟล์อัปโหลด
+    depends_on:
+      - mqtt-broker
+    env_file:
+      - .env
+
+  websocket-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: websocket-server
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mqtt-broker
+    environment:
+      - BROKER=mqtt-broker
+  
+  # insert_db:S
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: insert_db
+  #   command: python DB/db.py
+  #   restart: always
+  #   depends_on:
+  #     - mqtt-broker
+  #     - db
+  #   env_file:
+  #     - .env
+
+volumes:
+  mysql_data_test: # กำหนดชื่อ volume ที่ต้องการจะสร้าง
+    driver: local
+  mosquitto_data:
+  mosquitto_logs:

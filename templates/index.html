@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+
+<body>
+    <h1>MQTT WebSocket with Authentication</h1>
+    <label for="topicInput">Enter Topic:</label>
+    <input type="text"
+           id="topicInput"
+           placeholder="Enter topic here">
+    <button id="subscribeButton">Subscribe</button>
+    <button id="greetButton">Send Greet Message</button>
+    <div id="messages"></div>
+
+    <script>
+        // Connection options with username and password
+        const options = {
+            username: 'admin', // Replace with your username
+            password: 'test',  // Replace with your password
+        };
+
+        // Connect to the MQTT broker (WebSocket URL)
+        const client = mqtt.connect('ws://localhost:9001', options); // Replace with your broker's WebSocket URL
+
+        let currentTopic = null; // Track the currently subscribed topic
+
+        // When connected
+        client.on('connect', () => {
+            console.log('Connected to broker');
+        });
+
+        // When a message is received
+        client.on('message', (topic, message) => {
+            const msgDiv = document.getElementById('messages');
+            const msg = document.createElement('p');
+            msg.textContent = `Topic: ${topic}, Message: ${message.toString()}`;
+            msgDiv.appendChild(msg);
+        });
+
+        // Handle errors
+        client.on('error', (err) => {
+            console.error('Connection error:', err);
+        });
+
+        // Subscribe button functionality
+        document.getElementById('subscribeButton').addEventListener('click', () => {
+            const newTopic = document.getElementById('topicInput').value.trim();
+            if (!newTopic) {
+                alert('Please enter a topic to subscribe to.');
+                return;
+            }
+
+            // Unsubscribe from the previous topic if one is subscribed
+            if (currentTopic) {
+                client.unsubscribe(currentTopic, (err) => {
+                    if (err) {
+                        console.error(`Failed to unsubscribe from ${currentTopic}:`, err);
+                    } else {
+                        console.log(`Unsubscribed from ${currentTopic}`);
+                    }
+                });
+            }
+
+            // Subscribe to the new topic
+            client.subscribe(newTopic, (err) => {
+                if (err) {
+                    console.error(`Failed to subscribe to ${newTopic}:`, err);
+                } else {
+                    console.log(`Subscribed to ${newTopic}`);
+                    currentTopic = newTopic; // Update the current topic
+                }
+            });
+        });
+
+        // Greet button functionality
+        document.getElementById('greetButton').addEventListener('click', () => {
+            if (!currentTopic) {
+                alert('Please subscribe to a topic first.');
+                return;
+            }
+
+            const message = 'Hello from Greet Button!';
+            client.publish(currentTopic, message, (err) => {
+                if (err) {
+                    console.error(`Failed to publish message to ${currentTopic}:`, err);
+                } else {
+                    console.log(`Message published to ${currentTopic}`);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

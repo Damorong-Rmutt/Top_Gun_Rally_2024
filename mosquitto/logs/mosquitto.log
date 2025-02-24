@@ -1,0 +1,106 @@
+1731344998: mosquitto version 2.0.20 starting
+1731344998: Config loaded from /mosquitto/config/mosquitto.conf.
+1731344998: Starting in local only mode. Connections will only be possible from clients running on this machine.
+1731344998: Create a configuration file which defines a listener to allow remote access.
+1731344998: For more details see https://mosquitto.org/documentation/authentication-methods/
+1731344998: Opening ipv4 listen socket on port 1883.
+1731344998: Opening ipv6 listen socket on port 1883.
+1731344998: mosquitto version 2.0.20 running
+1731346799: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731348600: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731350401: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731352202: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731354003: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731355804: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731357605: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731359406: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731361207: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731363008: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731364809: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731392720: mosquitto version 2.0.20 starting
+1731392720: Config loaded from /mosquitto/config/mosquitto.conf.
+1731392720: Opening ipv4 listen socket on port 1883.
+1731392720: mosquitto version 2.0.20 running
+1731392817: New connection from 172.18.0.1:39150 on port 1883.
+1731392817: New client connected from 172.18.0.1:39150 as mqttx_4bae1bab (p5, c1, k60).
+1731393022: mosquitto version 2.0.20 terminating
+1731393022: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731393023: mosquitto version 2.0.20 starting
+1731393023: Config loaded from /mosquitto/config/mosquitto.conf.
+1731393023: Opening ipv4 listen socket on port 1883.
+1731393023: mosquitto version 2.0.20 running
+1731393026: New connection from 172.18.0.1:60908 on port 1883.
+1731393026: New client connected from 172.18.0.1:60908 as mqttx_4bae1bab (p5, c1, k60).
+1731393411: New connection from 172.18.0.1:42226 on port 1883.
+1731393411: New client connected from 172.18.0.1:42226 as auto-CE0BB136-2B90-E1E3-DA8B-A5781C3FFF04 (p2, c1, k60).
+1731394365: Client auto-CE0BB136-2B90-E1E3-DA8B-A5781C3FFF04 disconnected.
+1731394673: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731394677: New connection from 172.18.0.1:40802 on port 1883.
+1731394677: New client connected from 172.18.0.1:40802 as mqttx_4bae1bab (p5, c1, k60).
+1731394824: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731395015: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731395025: New connection from 172.18.0.1:35834 on port 1883.
+1731395025: New client connected from 172.18.0.1:35834 as mqttx_4bae1bab (p5, c1, k60).
+1731395555: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731395559: New connection from 172.18.0.1:57148 on port 1883.
+1731395559: New client connected from 172.18.0.1:57148 as mqttx_4bae1bab (p5, c1, k60).
+1731396095: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731396099: New connection from 172.18.0.1:55098 on port 1883.
+1731396099: New client connected from 172.18.0.1:55098 as mqttx_4bae1bab (p5, c1, k60).
+1731396575: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731396579: New connection from 172.18.0.1:52560 on port 1883.
+1731396579: New client connected from 172.18.0.1:52560 as mqttx_4bae1bab (p5, c1, k60).
+1731396625: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731396995: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731396999: New connection from 172.18.0.1:44044 on port 1883.
+1731396999: New client connected from 172.18.0.1:44044 as mqttx_4bae1bab (p5, c1, k60).
+1731397475: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731397479: New connection from 172.18.0.1:60834 on port 1883.
+1731397479: New client connected from 172.18.0.1:60834 as mqttx_4bae1bab (p5, c1, k60).
+1731397895: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731397899: New connection from 172.18.0.1:47680 on port 1883.
+1731397899: New client connected from 172.18.0.1:47680 as mqttx_4bae1bab (p5, c1, k60).
+1731398315: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731398319: New connection from 172.18.0.1:56872 on port 1883.
+1731398319: New client connected from 172.18.0.1:56872 as mqttx_4bae1bab (p5, c1, k60).
+1731398426: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731398795: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731398799: New connection from 172.18.0.1:49368 on port 1883.
+1731398799: New client connected from 172.18.0.1:49368 as mqttx_4bae1bab (p5, c1, k60).
+1731399335: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731399339: New connection from 172.18.0.1:35076 on port 1883.
+1731399339: New client connected from 172.18.0.1:35076 as mqttx_4bae1bab (p5, c1, k60).
+1731399755: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731399759: New connection from 172.18.0.1:36502 on port 1883.
+1731399759: New client connected from 172.18.0.1:36502 as mqttx_4bae1bab (p5, c1, k60).
+1731400227: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731400235: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731400239: New connection from 172.18.0.1:45208 on port 1883.
+1731400239: New client connected from 172.18.0.1:45208 as mqttx_4bae1bab (p5, c1, k60).
+1731400655: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731400659: New connection from 172.18.0.1:58634 on port 1883.
+1731400659: New client connected from 172.18.0.1:58634 as mqttx_4bae1bab (p5, c1, k60).
+1731401075: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731401079: New connection from 172.18.0.1:36324 on port 1883.
+1731401079: New client connected from 172.18.0.1:36324 as mqttx_4bae1bab (p5, c1, k60).
+1731401555: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731401559: New connection from 172.18.0.1:49292 on port 1883.
+1731401559: New client connected from 172.18.0.1:49292 as mqttx_4bae1bab (p5, c1, k60).
+1731402028: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731402215: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731402219: New connection from 172.18.0.1:59360 on port 1883.
+1731402219: New client connected from 172.18.0.1:59360 as mqttx_4bae1bab (p5, c1, k60).
+1731402755: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731402759: New connection from 172.18.0.1:41780 on port 1883.
+1731402759: New client connected from 172.18.0.1:41780 as mqttx_4bae1bab (p5, c1, k60).
+1731403175: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731403179: New connection from 172.18.0.1:56480 on port 1883.
+1731403179: New client connected from 172.18.0.1:56480 as mqttx_4bae1bab (p5, c1, k60).
+1731403775: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731403779: New connection from 172.18.0.1:49938 on port 1883.
+1731403779: New client connected from 172.18.0.1:49938 as mqttx_4bae1bab (p5, c1, k60).
+1731403829: Saving in-memory database to /mosquitto/data//mosquitto.db.
+1731404375: Client mqttx_4bae1bab has exceeded timeout, disconnecting.
+1731404379: New connection from 172.18.0.1:48910 on port 1883.
+1731404379: New client connected from 172.18.0.1:48910 as mqttx_4bae1bab (p5, c1, k60).
+1731404562: Client mqttx_4bae1bab closed its connection.
